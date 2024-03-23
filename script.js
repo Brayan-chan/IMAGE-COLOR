@@ -53,12 +53,25 @@ function generateGradient(color1, color2, steps) {
 
 const image = document.querySelector('img');
 image.onload = () => {
-    const color1 = getAverageColor(image, 4);
+    const ratio = 4; // Ratio para el cálculo del color promedio
     const color2 = { R: 255, G: 255, B: 255 }; // Color blanco como segundo color
 
+    // Obtener el color promedio de la imagen
+    const color1 = getAverageColor(image, ratio);
+
+    // Generar un gradiente con pasos intermedios
     const gradientSteps = 10; // Número de pasos en el gradiente
     const gradientColors = generateGradient(color1, color2, gradientSteps);
 
-    // Asignar el gradiente al fondo del cuerpo
-    document.body.style.background = `linear-gradient(to bottom, ${gradientColors.join(', ')})`;
+    // Aplicar el primer color del gradiente inmediatamente
+    document.body.style.transition = 'background 0s'; // Desactivar la transición temporalmente
+    document.body.style.background = gradientColors[0];
+
+    // Esperar un pequeño tiempo para que el navegador aplique el cambio de fondo
+    setTimeout(() => {
+        // Reactivar la transición y aplicar el gradiente completo
+        document.body.style.transition = 'background 2s';
+        document.body.style.background = `linear-gradient(to bottom, ${gradientColors.join(', ')})`;
+    }, 0); // Esperar 50 milisegundos antes de aplicar el gradiente completo
 };
+
